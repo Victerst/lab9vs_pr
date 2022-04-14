@@ -1,0 +1,48 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:lab9vs_pr.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:models="clr-namespace:lab9vs_pr.Models"
+        mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="800"
+        x:Class="lab9vs_pr.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="lab9vs_pr">
+	
+
+	<Design.DataContext>
+		<vm:MainWindowViewModel/>
+	</Design.DataContext>
+
+	<Grid ColumnDefinitions="190,*" Background="#000a09" >
+		<StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+			<Button Name="back" IsVisible="{Binding ButtonsEnabled}"  IsEnabled="{Binding ButtonsEnabled}" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10" Width="200" Content="Back"/>
+			<Carousel   Name="carousel"  Items="{Binding ImagesSelect}" >
+				<Carousel.DataTemplates >
+					<DataTemplate>
+						<Image Source="{Binding ImageBitmap}" MaxWidth="320">
+							<ToolTip.Tip>
+								<TextBlock Text="{Binding Path}"/>
+							</ToolTip.Tip>
+						</Image>
+					</DataTemplate>
+				</Carousel.DataTemplates>
+			</Carousel>
+			<Button Name="forward" IsVisible="{Binding ButtonsEnabled}" IsEnabled="{Binding ButtonsEnabled}" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10" Width="200" Content="Next"/>
+		</StackPanel>
+		
+		<TreeView Grid.Column="0" Name="Tree" Items="{Binding Items}" Background="#960018" >
+			<TreeView.DataTemplates>
+				<TreeDataTemplate DataType="{x:Type models:Directory}"
+										  ItemsSource="{Binding Items}">
+					<TextBlock Text="{Binding Name}" Background="#9bbac9" Foreground="Black"/>
+				</TreeDataTemplate>
+				<DataTemplate DataType="{x:Type models:Folder}">
+					<Grid ColumnDefinitions="*">
+						<Button Grid.Column="0" Content="{Binding Name}" Command="{Binding $parent[TreeView].DataContext.SelectDirectory}" CommandParameter="{Binding}" Background="#9bbac9" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+					</Grid>
+				</DataTemplate>
+			</TreeView.DataTemplates>
+		</TreeView>
+	</Grid>
+</Window>
